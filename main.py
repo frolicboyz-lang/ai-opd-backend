@@ -1,22 +1,14 @@
 from fastapi import FastAPI
+import os
+import uvicorn
 
-app = FastAPI()
+app = FastAPI(title="AI OPD Backend")
 
 @app.get("/")
 def root():
-    return {"message": "AI OPD running!"}
-from fastapi import UploadFile, File
-import shutil
-import os
+    return "ai opd running"
 
-@app.post("/voice")
-async def voice_opd(audio: UploadFile = File(...)):
-    file_path = f"temp_{audio.filename}"
-
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(audio.file, buffer)
-
-    return {
-        "message": "Voice received successfully",
-        "filename": audio.filename
-    }
+# IMPORTANT: This is required for Replit / cloud platforms
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
